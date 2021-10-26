@@ -9,6 +9,7 @@ except ImportError:
     import tkFileDialog as filedialog
 
 TITLE="demo"
+WINDOW_BG='#555'
 
 FILE_TYPES=[('PDF files', '.pdf'),
             ('JPG files', '.jpg'),
@@ -17,10 +18,12 @@ FILE_TYPES=[('PDF files', '.pdf'),
             ('all files', '.*')]
 
 root = None
+style = None
 
 def init():
-    global root
+    global root, style
     root = tk.Tk()
+    root.configure(bg=WINDOW_BG)
     root.resizable(False, False)
     root.winfo_toplevel().title(TITLE)
     root.geometry('500x300')
@@ -30,7 +33,8 @@ def init():
     px=int(root.winfo_screenwidth()/3 - width/2)
     py=int(root.winfo_screenheight()/3 - height/2)
     root.geometry('+{}+{}'.format(px, py))
-    style = ttk.Style(root)
+
+    style = ttk.Style()
     style.theme_use("clam")
 
 def open_folder():
@@ -53,9 +57,10 @@ def start():
     global root
     root.mainloop()
 
+
 init()
 
-b1 = ttk.Button(root, text="Open Folders", command=open_folder)
+b1 = ttk.Button(root, text="Open Folders",command=open_folder)
 b1.place(x=200,y=100)
 
 b2 = ttk.Button(root, text="Open Files", command=open_file)
