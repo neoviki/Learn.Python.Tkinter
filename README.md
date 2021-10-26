@@ -2,7 +2,7 @@
 
 #### File Manager 1 ( examples/filemanager_1/demo.png )
 
-![](examples/filemanager_1)
+![](examples/filemanager_1/demo.png)
 
 #### Label 1 ( examples/label_1 )
 
