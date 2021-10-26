@@ -21,6 +21,7 @@ root = None
 def init():
     global root
     root = tk.Tk()
+    root.resizable(False, False)
     root.winfo_toplevel().title(TITLE)
     root.geometry('500x300')
     width = root.winfo_reqwidth()
