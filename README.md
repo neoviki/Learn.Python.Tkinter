@@ -11,3 +11,7 @@
 #### Input 1 ( examples/input_1 )
 
 ![](examples/input_1/demo.png)
+
+#### Display Area 1 ( examples/display_area1 )
+
+![](examples/display_area1/demo.png)
