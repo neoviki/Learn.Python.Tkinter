@@ -8,7 +8,7 @@ except ImportError:
     import ttk
     import tkFileDialog as filedialog
 
-
+TITLE="demo"
 
 FILE_TYPES=[('PDF files', '.pdf'),
             ('JPG files', '.jpg'),
@@ -21,6 +21,7 @@ root = None
 def init():
     global root
     root = tk.Tk()
+    root.winfo_toplevel().title(TITLE)
     root.geometry('500x300')
     width = root.winfo_reqwidth()
     height = root.winfo_reqheight()
@@ -42,6 +43,10 @@ def open_file():
     global root
     rep = filedialog.askopenfilenames(parent=root, initialdir=os.getcwd(), filetypes=FILE_TYPES)
     print(rep[0])
+    #try:
+    #    os.startfile(rep[0])
+    #except IndexError:
+    #    print("No file selected")
 
 def start():
     global root
@@ -50,9 +55,9 @@ def start():
 init()
 
 b1 = ttk.Button(root, text="Open Folders", command=open_folder)
-b1.grid(row=1, column=0, padx=4, pady=4, sticky='ew')
+b1.place(x=200,y=100)
 
 b2 = ttk.Button(root, text="Open Files", command=open_file)
-b2.grid(row=2, column=0, padx=4, pady=4, sticky='ew')
+b2.place(x=200,y=150)
 
 start()
