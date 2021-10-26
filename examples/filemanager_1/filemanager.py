@@ -37,14 +37,14 @@ def init():
     style = ttk.Style()
     style.theme_use("clam")
 
-def open_folder():
+def cb_open_folder():
     global root
     rep = filedialog.askdirectory(
         parent=root,
         initialdir=os.getcwd())
     print(rep)
 
-def open_file():
+def cb_open_file():
     global root
     rep = filedialog.askopenfilenames(parent=root, initialdir=os.getcwd(), filetypes=FILE_TYPES)
     print(rep[0])
@@ -57,13 +57,14 @@ def start():
     global root
     root.mainloop()
 
+def vw_button(x, y, text, callback ):
+    b = ttk.Button(root, text=text,command=callback)
+    b.place(x=x,y=y)
+    return b
 
 init()
 
-b1 = ttk.Button(root, text="Open Folders",command=open_folder)
-b1.place(x=200,y=100)
-
-b2 = ttk.Button(root, text="Open Files", command=open_file)
-b2.place(x=200,y=150)
+vw_button(200, 100, "Open Folders", cb_open_folder)
+vw_button(200, 150, "Open Files", cb_open_file)
 
 start()
