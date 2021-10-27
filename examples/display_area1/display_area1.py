@@ -14,123 +14,150 @@ except ImportError:
 
 
 # System Variables Start
-
-TITLE="demo"
+main=None
 root=None
-_TITLE='demo'
-_BG_COLOR='#555'
-_WIDTH=10
-_HEIGHT=10
-_DIMENSION='' + str(_WIDTH) + 'x' + str(_HEIGHT) + ''
-
 # System Variables End
 
-def dimension(w, h):
-    global root, _WIDTH, _HEIGHT, _DIMENSION
-    _WIDTH = str(w)
-    _HEIGHT = str(h)
-    _DIMENSION = '' + str(_WIDTH) + 'x' + str(_HEIGHT) + ''
-    root.geometry(_DIMENSION)
-    w = root.winfo_reqwidth()
-    h = root.winfo_reqheight()
-    px=int(root.winfo_screenwidth()/3 - w/2)
-    py=int(root.winfo_screenheight()/3 - h/2)
-    root.geometry('+{}+{}'.format(px, py))
+class MAIN:
+    def __init__(self):
+        global main
+        self._TITLE='demo'
+        self._BG_COLOR='#555'
+        self._WIDTH=200
+        self._HEIGHT=200
+        self._DIMENSION='' + str(self._WIDTH) + 'x' + str(self._HEIGHT) + ''
+        main = tk.Tk()
+        self.bg(self._BG_COLOR)
+        self.title(self._TITLE)
+        self.dimension(self._WIDTH, self._HEIGHT)
+        self.disable_resize()
 
-def resizable(flag):
-    global root
-    root.resizable(flag, flag)
+    def dimension(self, w, h):
+        global main
+        self._WIDTH = str(w)
+        self._HEIGHT = str(h)
+        self._DIMENSION = '' + str(self._WIDTH) + 'x' + str(self._HEIGHT) + ''
+        main.geometry(self._DIMENSION)
+        w = main.winfo_reqwidth()
+        h = main.winfo_reqheight()
+        px=int(main.winfo_screenwidth()/3 - w/2)
+        py=int(main.winfo_screenheight()/3 - h/2)
+        main.geometry('+{}+{}'.format(px, py))
 
-def bg(bg_color):
-    global root, _BG_COLOR
-    _BG_COLOR = bg_color
-    root.configure(bg=_BG_COLOR)
+    def disable_resize(self):
+        global main
+        main.resizable(False, False)
 
-def title(title_string):
-    global root, _TITLE
-    _TITLE = title_string;
-    root.winfo_toplevel().title(_TITLE)
+    def enable_resize(self):
+        global main
+        main.resizable(True, True)
 
-def loop():
-    global root
-    root.mainloop()
+    def bg(self, bg_color):
+        global main
+        _BG_COLOR = bg_color
+        main.configure(bg=_BG_COLOR)
 
-def gotoxy(x, y):
-    global root
-    root.geometry('+{}+{}'.format(x, y))
+    def title(self, title_string):
+        global main, _TITLE
+        _TITLE = title_string;
+        main.winfo_toplevel().title(_TITLE)
 
-def init(w, h):
-    global root, _BG_COLOR, _TITLE, _WIDTH, _HEIGHT, _DIMENSION
-    root = tk.Tk()
-    bg(_BG_COLOR)
-    title(_TITLE)
-    dimension(w, h)
-    resizable(False)
+    def gotoxy(self, x, y):
+        global main
+        main.geometry('+{}+{}'.format(x, y))
+
+def BEGIN():
+    global root, main
+    root = MAIN()
+
+def END():
+    global main
+    main.mainloop()
+
 
 class display_area:
-    def __init__(self,win):
+    def __init__(self):
+        global main
         self.font_type = 'consolas'
         self.fsize = '12'
         self.width = 10
-        self.height = 10
+        self.height = 1
         self.bg_color = "white"
         self.fg_color = "black"
         self.border_color="black"
 
-        self.display = scrolledtext.ScrolledText(master=win,
-                                                 cursor="arrow",
-                                                 bg=self.bg_color,
-                                                 undo=True,
-                                                 wrap=tk.WORD)
+        self.object = tk.scrolledtext.ScrolledText(master=main,
+                                  cursor="arrow",
+                                  bg=self.bg_color,
+                                  undo=True)
 
-        self.display.configure(width=self.width, height=self.height)
+        self.dimension(self.width, self.height)
+        self.font(self.font_type)
+        self.font_size(self.fsize)
+        self.enable_text_wrap()
+        self.object.pack()
 
-        self.display['font'] = (self.font_type, self.fsize)
-        self.display.configure(highlightbackground=self.border_color)
-        self.display.configure(state='disabled')
-        self.display.pack()
+    def enable_text_wrap(self):
+        self.object.config(wrap=tk.WORD)
 
     def font(self, font_type):
         self.font_type = font_type
-        self.display['font'] = (self.font_type, self.font_size)
+        self.object.config(font=(self.font_type, self.fsize))
 
     def font_size(self, fsize):
         self.fsize = str(fsize)
-        self.display['font'] = (self.font_type, self.fsize)
+        self.object.config(font=(self.font_type, self.fsize))
 
     def bg(self, bg_color):
         self.bg_color = bg_color
-        self.display.configure(bg=self.bg_color)
-        return
+        self.object.configure(bg=self.bg_color)
+
+    def fg(self, fg_color):
+        self.fg_color = fg_color
+        self.object.configure(fg=self.fg_color)
 
     def gotoxy(self, x, y):
-        self.display.place(x=x,y=y)
+        self.object.place(x=x,y=y)
 
-    def println(self, string):
-        self.display.configure(state='normal')
-        nstring=" " + string + '\n'
-        self.display.insert(tk.END, nstring)
-        self.display.configure(state='disabled')
+    def write(self, string):
+        nstring=string
+        self.object.insert(tk.END, nstring)
+
+    def read(self):
+        return self.object.get('1.0', tk.END)
+
+    def disable(self):
+        self.object.configure(state='disabled')
+
+    def enable(self):
+        self.object.configure(state='normal')
 
     def dimension(self, w, h):
         self.width = w
         self.height = h
-        self.display.configure(width=self.width, height=self.height)
+        self.object.config(width=self.width)
+        self.object.config(height=self.height)
 
 
+BEGIN()
 
+root.title("demo")
+root.dimension(500,500)
+root.bg('#555')
+root.gotoxy(200,100)
 
-init(500, 500)
+obj = display_area()
+obj.dimension(52, 20)
+obj.gotoxy(30, 100)
+obj.font_size(12)
+obj.write("test 1\n")
+obj.write("test 2\n")
+obj.write("test 3\n")
+obj.bg("white")
+obj.fg("green")
+print obj.read()
+#obj.disable()
+#obj.enable()
 
-title("demo")
-bg('#555')
-gotoxy(600,100)
-d = display_area(root)
-d.dimension(52, 10)
-d.gotoxy(30, 100)
-d.font_size(13)
-d.println("test")
-d.bg("red")
-
-loop()
+END()
 
