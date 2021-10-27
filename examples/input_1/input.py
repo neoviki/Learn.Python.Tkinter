@@ -86,8 +86,9 @@ class input_box:
         self.fg_color = "black"
         self.border_color="black"
         self.object = tk.Entry(main)
-        self.object.config(width=self.width)
-        self.object.config(font=(self.font_type, self.fsize))
+        self.font(self.font_type)
+        self.font_size(self.fsize)
+        self.dimension(self.width, self.height)
         self.object.pack()
 
     def font(self, font_type):
