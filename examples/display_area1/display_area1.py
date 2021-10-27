@@ -4,92 +4,133 @@ try:
     import tkinter.ttk as ttk
     from tkinter import filedialog
     import tkinter.scrolledtext as scrolledtext
+    import tkFont
 except ImportError:
     import Tkinter as tk
     import ttk
     import tkFileDialog as filedialogs
     import Tkinter.scrolledtext as scrolledtext
+    import tkFont
+
+
+# System Variables Start
 
 TITLE="demo"
-WINDOW_BG='#555'
-DISPLAY_AREA_BG="white"
-DISPLAY_AREA_BORDER="black"
-DISPLAY_AREA_FONT_SIZE='12'
-DISPLAY_AREA_FONT='consolas'
+root=None
+_TITLE='demo'
+_BG_COLOR='#555'
+_WIDTH=10
+_HEIGHT=10
+_DIMENSION='' + str(_WIDTH) + 'x' + str(_HEIGHT) + ''
 
-FILE_TYPES=[('PDF files', '.pdf'),
-            ('JPG files', '.jpg'),
-            ('PNG files', '.png'),
-            ('Py files', '*.py'),
-            ('all files', '.*')]
+# System Variables End
 
-root = None
-style = None
-
-def init():
-    global root, style
-    root = tk.Tk()
-    root.configure(bg=WINDOW_BG)
-    root.resizable(False, False)
-    root.winfo_toplevel().title(TITLE)
-    root.geometry('500x300')
-    width = root.winfo_reqwidth()
-    height = root.winfo_reqheight()
-
-    px=int(root.winfo_screenwidth()/3 - width/2)
-    py=int(root.winfo_screenheight()/3 - height/2)
+def dimension(w, h):
+    global root, _WIDTH, _HEIGHT, _DIMENSION
+    _WIDTH = str(w)
+    _HEIGHT = str(h)
+    _DIMENSION = '' + str(_WIDTH) + 'x' + str(_HEIGHT) + ''
+    root.geometry(_DIMENSION)
+    w = root.winfo_reqwidth()
+    h = root.winfo_reqheight()
+    px=int(root.winfo_screenwidth()/3 - w/2)
+    py=int(root.winfo_screenheight()/3 - h/2)
     root.geometry('+{}+{}'.format(px, py))
 
-    style = ttk.Style()
-    style.theme_use("clam")
-
-def cb_open_folder():
+def resizable(flag):
     global root
-    rep = filedialog.askdirectory(
-        parent=root,
-        initialdir=os.getcwd())
-    print(rep)
+    root.resizable(flag, flag)
 
-def cb_open_file():
-    global root
-    rep = filedialog.askopenfilenames(parent=root, initialdir=os.getcwd(), filetypes=FILE_TYPES)
-    print(rep[0])
-    #try:
-    #    os.startfile(rep[0])
-    #except IndexError:
-    #    print("No file selected")
+def bg(bg_color):
+    global root, _BG_COLOR
+    _BG_COLOR = bg_color
+    root.configure(bg=_BG_COLOR)
 
-def start():
+def title(title_string):
+    global root, _TITLE
+    _TITLE = title_string;
+    root.winfo_toplevel().title(_TITLE)
+
+def loop():
     global root
     root.mainloop()
 
-def vw_button(x, y, text, callback ):
-    b = ttk.Button(root, text=text,command=callback)
-    b.place(x=x,y=y)
-    return b
-
-init()
-
-def display_area(x, y, width, height):
+def gotoxy(x, y):
     global root
-    display = scrolledtext.ScrolledText(master=root, cursor="arrow", bg=DISPLAY_AREA_BG,
-                                        undo=True, wrap=tk.WORD, width=width, height=height)
-    display['font'] = (DISPLAY_AREA_FONT, DISPLAY_AREA_FONT_SIZE)
-    display.configure(highlightbackground=DISPLAY_AREA_BORDER)
-    display.configure(state='disabled')
-    display.pack()
-    display.place(x=x,y=y)
-    return display
+    root.geometry('+{}+{}'.format(x, y))
 
-def display_areas_print(handle, string):
-    handle.configure(state='normal')
-    nstring=" " + string + '\n'
-    handle.insert(tk.END, nstring)
-    handle.configure(state='disabled')
+def init(w, h):
+    global root, _BG_COLOR, _TITLE, _WIDTH, _HEIGHT, _DIMENSION
+    root = tk.Tk()
+    bg(_BG_COLOR)
+    title(_TITLE)
+    dimension(w, h)
+    resizable(False)
 
-d = display_area(30, 100, 52, 10)
-for i in range(20):
-    display_areas_print(d, "test")
+class display_area:
+    def __init__(self,win):
+        self.font_type = 'consolas'
+        self.fsize = '12'
+        self.width = 10
+        self.height = 10
+        self.bg_color = "white"
+        self.fg_color = "black"
+        self.border_color="black"
+
+        self.display = scrolledtext.ScrolledText(master=win,
+                                                 cursor="arrow",
+                                                 bg=self.bg_color,
+                                                 undo=True,
+                                                 wrap=tk.WORD)
+
+        self.display.configure(width=self.width, height=self.height)
+
+        self.display['font'] = (self.font_type, self.fsize)
+        self.display.configure(highlightbackground=self.border_color)
+        self.display.configure(state='disabled')
+        self.display.pack()
+
+    def font(self, font_type):
+        self.font_type = font_type
+        self.display['font'] = (self.font_type, self.font_size)
+
+    def font_size(self, fsize):
+        self.fsize = str(fsize)
+        self.display['font'] = (self.font_type, self.fsize)
+
+    def bg(self, bg_color):
+        self.bg_color = bg_color
+        self.display.configure(bg=self.bg_color)
+        return
+
+    def gotoxy(self, x, y):
+        self.display.place(x=x,y=y)
+
+    def println(self, string):
+        self.display.configure(state='normal')
+        nstring=" " + string + '\n'
+        self.display.insert(tk.END, nstring)
+        self.display.configure(state='disabled')
+
+    def dimension(self, w, h):
+        self.width = w
+        self.height = h
+        self.display.configure(width=self.width, height=self.height)
 
 
-start()
+
+
+init(500, 500)
+
+title("demo")
+bg('#555')
+gotoxy(600,100)
+d = display_area(root)
+d.dimension(52, 10)
+d.gotoxy(30, 100)
+d.font_size(13)
+d.println("test")
+d.bg("red")
+
+loop()
+
