@@ -1,60 +1,25 @@
-try:
-    import os
-    import tkinter as tk
-    import tkinter.ttk as ttk
-    from tkinter import filedialog
-except ImportError:
-    import Tkinter as tk
-    import ttk
-    import tkFileDialog as filedialog
+from UI import *
 
-TITLE="demo"
-WINDOW_BG='#555'
-LABEL_BG="red"
-FILE_TYPES=[('PDF files', '.pdf'),
-            ('JPG files', '.jpg'),
-            ('PNG files', '.png'),
-            ('Py files', '*.py'),
-            ('all files', '.*')]
+def button_callback():
+    print("hello")
 
-root = None
-style = None
 
-def init():
-    global root, style
-    root = tk.Tk()
-    root.configure(bg=WINDOW_BG)
-    root.resizable(False, False)
-    root.winfo_toplevel().title(TITLE)
-    root.geometry('500x300')
-    width = root.winfo_reqwidth()
-    height = root.winfo_reqheight()
+root = BEGIN()
+root.title("demo")
+root.dimension(500,500)
+#root.bg('#555')
+root.gotoxy(200,100)
 
-    px=int(root.winfo_screenwidth()/3 - width/2)
-    py=int(root.winfo_screenheight()/3 - height/2)
-    root.geometry('+{}+{}'.format(px, py))
+obj = label(root)
+obj.dimension(30, 5)
+obj.gotoxy(120, 100)
+obj.font_size(12)
+obj.bg('black')
+obj.fg("white")
+obj.write("Line 1\n")
+obj.write("Line 2\n")
+#obj.disable()
+#obj.enable()
 
-    style = ttk.Style()
-    style.theme_use("clam")
-
-def start():
-    global root
-    root.mainloop()
-
-def vw_button(x, y, text, callback ):
-    b = ttk.Button(root, text=text,command=callback)
-    b.place(x=x,y=y)
-    return b
-
-def vw_label(x, y, text, font_size, label_width):
-    global root
-    label = ttk.Label(root, text = text, background=LABEL_BG)
-    label.config(width=label_width)
-    label.config(font=("Courier", font_size))
-    label.pack()
-    label.place(x=x,y=y)
-
-init()
-vw_label(100, 100, "hello", 15, 20)
-start()
+END(root)
 
