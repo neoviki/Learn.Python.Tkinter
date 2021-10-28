@@ -24,3 +24,7 @@
 
 ![](examples/progress_bar/demo.png)
 
+#### Logo ( examples/logo )
+
+![](examples/logo/demo.png)
+
