@@ -20,3 +20,7 @@
 
 ![](examples/button_1/demo.png)
 
+#### Progressbar 1 ( examples/progress_bar )
+
+![](examples/progress_bar/demo.png)
+
