@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../../lib')
 from UI import *
 
 def button_callback():
